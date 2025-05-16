@@ -7,6 +7,11 @@
 
 <script setup lang="ts">
 import Header from './components/Header.vue';
+import { useEmployeeStore } from './stores/employee';
+
+const employeeStore = useEmployeeStore();
+
+employeeStore.fetchEmployees();
 </script>
 
 <style>
