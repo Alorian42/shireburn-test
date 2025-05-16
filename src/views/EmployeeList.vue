@@ -19,15 +19,15 @@
 
 			<template #item-actions="item">
 				<div class="actions">
-					<button>View</button>
-					<button>Edit</button>
+					<button @click="onView(item)">View</button>
+					<button @click="onEdit(item)">Edit</button>
 					<button @click="onDelete(item)">Delete</button>
 				</div>
 			</template>
 		</EasyDataTable>
 
 		<div class="global-actions">
-			<button class="create">Create Employee</button>
+			<button class="create" @click="onCreate">Create Employee</button>
 			<button class="export" @click="onExport">Export</button>
 			<button class="import" @click="onImportClick">Import</button>
 		</div>
@@ -41,6 +41,7 @@ import EasyDataTable from 'vue3-easy-data-table';
 import type { Header, Item } from 'vue3-easy-data-table';
 import { ref } from 'vue';
 import { useFileDialog } from '@vueuse/core';
+import { useRouter } from 'vue-router';
 
 const employeeStore = useEmployeeStore();
 const { isLoading, employeeRows } = storeToRefs(employeeStore);
@@ -49,10 +50,12 @@ const { open, onChange, reset } = useFileDialog({
 	accept: 'application/json',
 	multiple: false,
 });
+const router = useRouter();
 
 const headers: Header[] = [
-	{ text: 'Name', value: 'name', sortable: true, width: 100 },
+	{ text: 'Name', value: 'fullName', sortable: true, width: 100 },
 	{ text: 'Occupation', value: 'occupation', sortable: true, width: 100 },
+	{ text: 'Department', value: 'department', sortable: true, width: 100 },
 	{
 		text: 'Date of Employment',
 		value: 'dateOfEmployment',
@@ -61,7 +64,7 @@ const headers: Header[] = [
 	},
 	{
 		text: 'Termination Date',
-		value: 'dateOfTermination',
+		value: 'terminationDate',
 		sortable: true,
 		width: 100,
 	},
@@ -76,10 +79,21 @@ const onDelete = (item: Item) => {
 		employeeStore.removeEmployee(item.id);
 	}
 };
+const onView = (item: Item) => {
+	router.push({ name: 'view-employee-form', params: { id: item.id } });
+};
+
+const onEdit = (item: Item) => {
+	router.push({ name: 'edit-employee-form', params: { id: item.id } });
+};
+
+const onCreate = () => {
+	router.push({ name: 'create-employee-form' });
+};
+
 const onExport = () => {
 	employeeStore.exportEmployees();
 };
-
 const onImportClick = () => {
 	open();
 };

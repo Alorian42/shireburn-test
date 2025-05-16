@@ -41,6 +41,15 @@ const POSSIBLE_EMPLOYEE_OCCUPATIONS = [
 	'Finance Analyst',
 	'Operations Manager',
 ];
+const POSSIBLE_EMPLOYEE_DEPARTMENTS = [
+	'Engineering',
+	'Marketing',
+	'Sales',
+	'Customer Support',
+	'Human Resources',
+	'Finance',
+	'Operations',
+];
 
 /**
  * Utils class for generating random employees
@@ -60,6 +69,9 @@ export default class EmployeeUtils {
 		const occupation = this.getRandomElementFromArray(
 			POSSIBLE_EMPLOYEE_OCCUPATIONS,
 		);
+		const department = this.getRandomElementFromArray(
+			POSSIBLE_EMPLOYEE_DEPARTMENTS,
+		);
 		// either in the past or in the future
 		const dateOfEmployment =
 			Math.random() > 0.2
@@ -67,7 +79,7 @@ export default class EmployeeUtils {
 				: new Date(Date.now() + Math.random() * 10000000000);
 		// either null, in the past or in the future
 		// 80% chance of being null, 10% chance of being in the past, 10% chance of being in the future
-		const dateOfTermination =
+		const terminationDate =
 			Math.random() < 0.8
 				? null
 				: Math.random() > 0.5
@@ -75,11 +87,11 @@ export default class EmployeeUtils {
 					: new Date(Date.now() + Math.random() * 10000000000);
 
 		return new Employee(
-			firstName,
-			lastName,
+			`${firstName} ${lastName}`,
 			occupation,
+			department,
 			dateOfEmployment,
-			dateOfTermination,
+			terminationDate,
 		);
 	}
 

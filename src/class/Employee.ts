@@ -3,10 +3,10 @@
  */
 export default class Employee {
 	constructor(
-		public firstName: string,
-		public lastName: string,
-		public occupation: string,
-		public dateOfEmployment: Date,
-		public dateOfTermination: Date | null,
+		public fullName: string = '',
+		public occupation: string = '',
+		public department: string = '',
+		public dateOfEmployment: Date = new Date(),
+		public terminationDate: Date | null = null,
 	) {}
 }

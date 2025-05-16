@@ -16,16 +16,17 @@ export const useEmployeeStore = defineStore('employee', {
 			return state.employees.map((employee, id) => {
 				return {
 					id: id,
-					name: `${employee.firstName} ${employee.lastName}`,
+					fullName: employee.fullName,
 					occupation: employee.occupation,
+					department: employee.department,
 					dateOfEmployment:
 						employee.dateOfEmployment > now
 							? 'Employed soon'
 							: 'Currently employed',
-					dateOfTermination:
-						employee.dateOfTermination === null
+					terminationDate:
+						employee.terminationDate === null
 							? ''
-							: employee.dateOfTermination > now
+							: employee.terminationDate > now
 								? 'To be terminated'
 								: 'Terminated',
 				};
@@ -60,15 +61,18 @@ export const useEmployeeStore = defineStore('employee', {
 		updateEmployee(index: number, employee: Employee) {
 			this.employees[index] = employee;
 		},
+		getEmployee(index: number) {
+			return this.employees[index];
+		},
 		exportEmployees() {
 			const jsonContent = JSON.stringify(
 				this.employees.map((employee) => ({
-					firstName: employee.firstName,
-					lastName: employee.lastName,
+					fullName: employee.fullName,
 					occupation: employee.occupation,
+					department: employee.department,
 					dateOfEmployment: employee.dateOfEmployment.toISOString(),
-					dateOfTermination: employee.dateOfTermination
-						? employee.dateOfTermination.toISOString()
+					terminationDate: employee.terminationDate
+						? employee.terminationDate.toISOString()
 						: null,
 				})),
 				null,
@@ -97,36 +101,35 @@ export const useEmployeeStore = defineStore('employee', {
 						const keys = Object.keys(item);
 						const keysAreValid = keys.every((key) =>
 							[
-								'firstName',
-								'lastName',
+								'fullName',
 								'occupation',
+								'department',
 								'dateOfEmployment',
-								'dateOfTermination',
+								'terminationDate',
 							].includes(key),
 						);
 						const dateOfEmployment = new Date(item.dateOfEmployment);
 						const dateOfEmploymentIsValid = !isNaN(dateOfEmployment.getTime());
-						const dateOfTermination = item.dateOfTermination
-							? new Date(item.dateOfTermination)
+						const terminationDate = item.terminationDate
+							? new Date(item.terminationDate)
 							: null;
-						const dateOfTerminationIsValid =
-							(dateOfTermination !== null &&
-								!isNaN(dateOfTermination.getTime())) ||
-							dateOfTermination === null;
+						const terminationDateIsValid =
+							(terminationDate !== null && !isNaN(terminationDate.getTime())) ||
+							terminationDate === null;
 						if (keys.length !== 5 || !keysAreValid) {
 							throw new Error('Invalid JSON format');
 						} else if (!dateOfEmploymentIsValid) {
 							throw new Error('Invalid dateOfEmployment format');
-						} else if (!dateOfTerminationIsValid) {
-							throw new Error('Invalid dateOfTermination format');
+						} else if (!terminationDateIsValid) {
+							throw new Error('Invalid terminationDate format');
 						}
 
 						return new Employee(
-							item.firstName,
-							item.lastName,
+							item.fullName,
 							item.occupation,
+							item.department,
 							dateOfEmployment,
-							dateOfTermination,
+							terminationDate,
 						);
 					});
 

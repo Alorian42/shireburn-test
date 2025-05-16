@@ -3,12 +3,22 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [
 	{
 		path: '/',
-		name: 'Employee List',
+		name: 'employee-list',
 		component: () => import('./views/EmployeeList.vue'),
 	},
 	{
 		path: '/create',
-		name: 'Create Employee Form',
+		name: 'create-employee-form',
+		component: () => import('./views/EmployeeForm.vue'),
+	},
+	{
+		path: '/edit/:id',
+		name: 'edit-employee-form',
+		component: () => import('./views/EmployeeForm.vue'),
+	},
+	{
+		path: '/view/:id',
+		name: 'view-employee-form',
 		component: () => import('./views/EmployeeForm.vue'),
 	},
 ];
