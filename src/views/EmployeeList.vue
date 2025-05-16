@@ -46,7 +46,7 @@ const employeeStore = useEmployeeStore();
 const { isLoading, employeeRows } = storeToRefs(employeeStore);
 
 const { open, onChange } = useFileDialog({
-	accept: '.csv',
+	accept: 'application/json',
 	multiple: false,
 });
 

@@ -61,48 +61,58 @@ export const useEmployeeStore = defineStore('employee', {
 			this.employees[index] = employee;
 		},
 		exportEmployees() {
-			const csvContent =
-				'data:text/csv;charset=utf-8,' +
-				this.employees
-					.map((employee) => {
-						return `${employee.firstName},${employee.lastName},${employee.occupation},${employee.dateOfEmployment.toISOString()},${employee.dateOfTermination?.toISOString() ?? ''}`;
-					})
-					.join('\n');
+			const jsonContent = JSON.stringify(
+				this.employees.map((employee) => ({
+					firstName: employee.firstName,
+					lastName: employee.lastName,
+					occupation: employee.occupation,
+					dateOfEmployment: employee.dateOfEmployment.toISOString(),
+					dateOfTermination: employee.dateOfTermination
+						? employee.dateOfTermination.toISOString()
+						: null,
+				})),
+				null,
+				2,
+			);
 
-			const encodedUri = encodeURI(csvContent);
+			const blob = new Blob([jsonContent], { type: 'application/json' });
+			const url = URL.createObjectURL(blob);
 			const link = document.createElement('a');
-			link.setAttribute('href', encodedUri);
-			link.setAttribute('download', 'employees.csv');
+			link.setAttribute('href', url);
+			link.setAttribute('download', 'employees.json');
 			document.body.appendChild(link);
 
 			link.click();
 			document.body.removeChild(link);
+			URL.revokeObjectURL(url);
 		},
 		importEmployees(file: File) {
 			const reader = new FileReader();
 			reader.onload = (event) => {
-				const csvData = event.target?.result as string;
-				const rows = csvData.split('\n');
-				const employees: Employee[] = [];
+				try {
+					const jsonData = event.target?.result as string;
+					const data = JSON.parse(jsonData);
+					const employees: Employee[] = data.map(
+						(item: any) =>
+							new Employee(
+								item.firstName,
+								item.lastName,
+								item.occupation,
+								new Date(item.dateOfEmployment),
+								item.dateOfTermination
+									? new Date(item.dateOfTermination)
+									: null,
+							),
+					);
 
-				rows.forEach((row) => {
-					const columns = row.split(',');
-					if (columns.length === 5) {
-						const employee = new Employee(
-							columns[0],
-							columns[1],
-							columns[2],
-							new Date(columns[3]),
-							columns[4] ? new Date(columns[4]) : null,
-						);
-						employees.push(employee);
-					}
-				});
-
-				this.$patch({
-					isLoading: false,
-					employees: employees,
-				});
+					this.$patch({
+						isLoading: false,
+						employees: employees,
+					});
+				} catch (error) {
+					console.error('Invalid JSON file:', error);
+					this.$patch({ isLoading: false });
+				}
 			};
 
 			this.$patch({
