@@ -1,8 +1,18 @@
 <template>
 	<div>
+		<div>
+			Search in:
+			<select v-model="searchField">
+				<option>name</option>
+				<option>occupation</option>
+			</select>
+			<input type="text" v-model="searchValue" placeholder="Search..." />
+		</div>
 		<EasyDataTable
 			:headers="headers"
 			:items="employeeRows"
+			:search-field="searchField"
+			:search-value="searchValue"
 			:loading="isLoading"
 		>
 			<template #loading> Data is loading... </template>
@@ -18,8 +28,8 @@
 
 		<div class="global-actions">
 			<button class="create">Create Employee</button>
-			<button class="export">Export</button>
-			<button class="import">Import</button>
+			<button class="export" @click="onExport">Export</button>
+			<button class="import" @click="onImportClick">Import</button>
 		</div>
 	</div>
 </template>
@@ -29,9 +39,16 @@ import { storeToRefs } from 'pinia';
 import { useEmployeeStore } from '../stores/employee';
 import EasyDataTable from 'vue3-easy-data-table';
 import type { Header, Item } from 'vue3-easy-data-table';
+import { ref } from 'vue';
+import { useFileDialog } from '@vueuse/core';
 
 const employeeStore = useEmployeeStore();
 const { isLoading, employeeRows } = storeToRefs(employeeStore);
+
+const { open, onChange } = useFileDialog({
+	accept: '.csv',
+	multiple: false,
+});
 
 const headers: Header[] = [
 	{ text: 'Name', value: 'name', sortable: true, width: 100 },
@@ -51,11 +68,26 @@ const headers: Header[] = [
 	{ text: 'Actions', value: 'actions', sortable: false, width: 220 },
 ];
 
+const searchField = ref('name');
+const searchValue = ref('');
+
 const onDelete = (item: Item) => {
 	if (window.confirm('Are you sure you want to delete this employee?')) {
 		employeeStore.removeEmployee(item.id);
 	}
 };
+const onExport = () => {
+	employeeStore.exportEmployees();
+};
+
+const onImportClick = () => {
+	open();
+};
+onChange((files) => {
+	if (files && files.length > 0) {
+		employeeStore.importEmployees(files[0]);
+	}
+});
 </script>
 
 <style scoped>
