@@ -1,11 +1,13 @@
 <template>
-	<div>
-		<div>
-			Search in:
-			<select v-model="searchField">
-				<option>name</option>
-				<option>occupation</option>
-			</select>
+	<div class="wrapper">
+		<div class="search-bar">
+			<div>
+				Search in:
+				<select v-model="searchField">
+					<option>name</option>
+					<option>occupation</option>
+				</select>
+			</div>
 			<input type="text" v-model="searchValue" placeholder="Search..." />
 		</div>
 		<EasyDataTable
@@ -107,6 +109,47 @@ onChange((files) => {
 </script>
 
 <style scoped>
+.wrapper {
+	padding-bottom: 20px;
+}
+
+.search-bar {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 18px;
+	background: #f8f9fa;
+	padding: 16px 20px;
+	border-radius: 8px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.search-bar input {
+	width: 200px;
+}
+
+.search-bar div {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.search-bar input,
+.search-bar select {
+	padding: 8px 10px;
+	border: 1px solid #cbd5e1;
+	border-radius: 6px;
+	font-size: 1rem;
+	background: #f8fafc;
+	transition: border 0.2s;
+}
+
+.search-bar input:focus,
+.search-bar select:focus {
+	border-color: #7c3aed;
+	outline: none;
+}
+
 .actions {
 	display: flex;
 	gap: 10px;
@@ -117,5 +160,24 @@ onChange((files) => {
 	display: flex;
 	gap: 10px;
 	margin-top: 20px;
+	padding-left: 20px;
+}
+
+@media (max-width: 600px) {
+	.global-actions {
+		padding-left: 5px;
+		padding-right: 5px;
+		flex-direction: column;
+	}
+
+	.search-bar {
+		flex-direction: column;
+	}
+
+	.search-bar input,
+	.search-bar select,
+	.search-bar div {
+		width: 100%;
+	}
 }
 </style>

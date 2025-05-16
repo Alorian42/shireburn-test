@@ -1,5 +1,5 @@
 <template>
-	<div v-if="employee">
+	<div class="wrapper" v-if="employee">
 		<template v-if="isViewMode">
 			<h2>{{ employee.fullName }}</h2>
 			<p>Occupation: {{ employee.occupation }}</p>
@@ -10,30 +10,30 @@
 		<template v-else>
 			<h2>{{ isEditMode ? 'Edit Employee' : 'Create Employee' }}</h2>
 			<form @submit.prevent="onSubmit">
-				<div>
+				<div class="form-field">
 					<label for="fullName">Full Name</label>
 					<input type="text" v-model="employee.fullName" required />
 				</div>
-				<div>
+				<div class="form-field">
 					<label for="occupation">Occupation</label>
 					<input type="text" v-model="employee.occupation" required />
 				</div>
-				<div>
+				<div class="form-field">
 					<label for="department">Department</label>
 					<input type="text" v-model="employee.department" required />
 				</div>
-				<div>
+				<div class="form-field">
 					<label for="dateOfEmployment">Date of Employment</label>
 					<input type="date" v-model="employmentDateValue" required />
 				</div>
-				<div>
+				<div class="form-field">
 					<label for="terminationDate">Termination Date</label>
 					<input type="date" v-model="terminationDateValue" />
 				</div>
 				<button type="submit">{{ isEditMode ? 'Update' : 'Create' }}</button>
 			</form>
 		</template>
-		<button @click="onClose">Close</button>
+		<button class="close-button" @click="onClose">Close</button>
 	</div>
 </template>
 
@@ -133,4 +133,70 @@ const terminationDateValue = computed({
 const formatDate = DateUtils.formatDate;
 </script>
 
-<style scoped></style>
+<style scoped>
+.wrapper {
+	margin: 0 auto;
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+	padding: 32px 28px 24px 28px;
+}
+
+h2 {
+	margin-top: 0;
+	margin-bottom: 18px;
+	color: #2d3a4b;
+	font-size: 1.7rem;
+	font-weight: 600;
+}
+
+p {
+	margin: 8px 0 0 0;
+	color: #4a5568;
+	font-size: 1.05rem;
+}
+
+.form-field {
+	margin-bottom: 18px;
+	display: flex;
+	flex-direction: column;
+}
+
+label {
+	margin-bottom: 6px;
+	color: #374151;
+	font-weight: 500;
+	font-size: 1rem;
+}
+
+input[type='text'],
+input[type='date'] {
+	padding: 8px 10px;
+	border: 1px solid #cbd5e1;
+	border-radius: 6px;
+	font-size: 1rem;
+	background: #f8fafc;
+	transition: border 0.2s;
+}
+
+input[type='text']:focus,
+input[type='date']:focus {
+	border-color: #7c3aed;
+	outline: none;
+}
+
+button {
+	min-width: 100%;
+}
+
+.close-button {
+	margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+	.wrapper {
+		border-radius: 0;
+		box-shadow: none;
+	}
+}
+</style>
