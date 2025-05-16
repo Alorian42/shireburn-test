@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper">
-		<div class="company">Purple Cross Ltd</div>
+		<h1 class="company">Purple Cross Ltd</h1>
 		<div class="user">
 			<div class="user-name">Admin</div>
 			<img
