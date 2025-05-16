@@ -1,12 +1,26 @@
 import { defineStore } from 'pinia';
-import type Employee from '../class/Employee';
 import EmployeeUtils from '../utils/EmployeeUtils';
+import type Employee from '../class/Employee';
 
 export const useEmployeeStore = defineStore('employee', {
 	state: () => {
 		return {
+			isLoading: true,
 			employees: [] as Employee[],
 		};
+	},
+	getters: {
+		employeeRows: (state) => {
+			return state.employees.map((employee, id) => {
+				return {
+					id: id,
+					name: `${employee.firstName} ${employee.lastName}`,
+					occupation: employee.occupation,
+					dateOfEmployment: employee.dateOfEmployment,
+					dateOfTermination: employee.dateOfTermination,
+				};
+			});
+		},
 	},
 	actions: {
 		fetchEmployees() {
@@ -17,8 +31,13 @@ export const useEmployeeStore = defineStore('employee', {
 
 			return new Promise((resolve) => {
 				setTimeout(() => {
-					this.employees = EmployeeUtils.generateRandomEmployees(amount);
-					resolve(this.employees);
+					const employees = EmployeeUtils.generateRandomEmployees(amount);
+
+					this.$patch({
+						isLoading: false,
+						employees: employees,
+					});
+					resolve(employees);
 				}, 1000);
 			});
 		},

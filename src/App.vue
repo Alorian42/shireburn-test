@@ -18,4 +18,13 @@ employeeStore.fetchEmployees();
 body {
 	background-color: #b8b8b8;
 }
+
+button {
+	background-color: #7c3aed;
+	color: white;
+	border: none;
+	padding: 10px;
+	border-radius: 5px;
+	cursor: pointer;
+}
 </style>
