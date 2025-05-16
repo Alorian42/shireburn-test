@@ -64,15 +64,20 @@ export const useEmployeeStore = defineStore('employee', {
 		getEmployee(index: number) {
 			return this.employees[index];
 		},
+		/**
+		 * Exports the employees to a JSON file
+		 */
 		exportEmployees() {
 			const jsonContent = JSON.stringify(
 				this.employees.map((employee) => ({
 					fullName: employee.fullName,
 					occupation: employee.occupation,
 					department: employee.department,
-					dateOfEmployment: employee.dateOfEmployment.toISOString(),
+					dateOfEmployment: employee.dateOfEmployment
+						.toISOString()
+						.substring(0, 10),
 					terminationDate: employee.terminationDate
-						? employee.terminationDate.toISOString()
+						? employee.terminationDate.toISOString().substring(0, 10)
 						: null,
 				})),
 				null,
@@ -90,6 +95,10 @@ export const useEmployeeStore = defineStore('employee', {
 			document.body.removeChild(link);
 			URL.revokeObjectURL(url);
 		},
+		/**
+		 * Imports employees from a JSON file
+		 * Validates the JSON format and the date formats
+		 */
 		importEmployees(file: File) {
 			const reader = new FileReader();
 			reader.onload = (event) => {

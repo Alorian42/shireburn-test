@@ -75,7 +75,7 @@ const searchField = ref('name');
 const searchValue = ref('');
 
 const onDelete = (item: Item) => {
-	if (window.confirm('Are you sure you want to delete this employee?')) {
+	if (confirm('Are you sure you want to delete this employee?')) {
 		employeeStore.removeEmployee(item.id);
 	}
 };
