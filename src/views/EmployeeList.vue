@@ -4,8 +4,9 @@
 			<div>
 				Search in:
 				<select v-model="searchField">
-					<option>name</option>
+					<option>fullName</option>
 					<option>occupation</option>
+					<option>department</option>
 				</select>
 			</div>
 			<input type="text" v-model="searchValue" placeholder="Search..." />
@@ -73,7 +74,7 @@ const headers: Header[] = [
 	{ text: 'Actions', value: 'actions', sortable: false, width: 220 },
 ];
 
-const searchField = ref('name');
+const searchField = ref('fullName');
 const searchValue = ref('');
 
 const onDelete = (item: Item) => {
