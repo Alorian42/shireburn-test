@@ -1,11 +1,16 @@
 <template>
-	<div class="header">header here</div>
+	<Header />
 	<div class="container">
 		<router-view />
 	</div>
-	<div class="footer">footer here</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Header from './components/Header.vue';
+</script>
 
-<style scoped></style>
+<style>
+body {
+	background-color: #b8b8b8;
+}
+</style>
