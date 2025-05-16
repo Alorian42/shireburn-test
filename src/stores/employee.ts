@@ -92,25 +92,51 @@ export const useEmployeeStore = defineStore('employee', {
 				try {
 					const jsonData = event.target?.result as string;
 					const data = JSON.parse(jsonData);
-					const employees: Employee[] = data.map(
-						(item: any) =>
-							new Employee(
-								item.firstName,
-								item.lastName,
-								item.occupation,
-								new Date(item.dateOfEmployment),
-								item.dateOfTermination
-									? new Date(item.dateOfTermination)
-									: null,
-							),
-					);
+
+					const employees: Employee[] = data.map((item: any) => {
+						const keys = Object.keys(item);
+						const keysAreValid = keys.every((key) =>
+							[
+								'firstName',
+								'lastName',
+								'occupation',
+								'dateOfEmployment',
+								'dateOfTermination',
+							].includes(key),
+						);
+						const dateOfEmployment = new Date(item.dateOfEmployment);
+						const dateOfEmploymentIsValid = !isNaN(dateOfEmployment.getTime());
+						const dateOfTermination = item.dateOfTermination
+							? new Date(item.dateOfTermination)
+							: null;
+						const dateOfTerminationIsValid =
+							(dateOfTermination !== null &&
+								!isNaN(dateOfTermination.getTime())) ||
+							dateOfTermination === null;
+						if (keys.length !== 5 || !keysAreValid) {
+							throw new Error('Invalid JSON format');
+						} else if (!dateOfEmploymentIsValid) {
+							throw new Error('Invalid dateOfEmployment format');
+						} else if (!dateOfTerminationIsValid) {
+							throw new Error('Invalid dateOfTermination format');
+						}
+
+						return new Employee(
+							item.firstName,
+							item.lastName,
+							item.occupation,
+							dateOfEmployment,
+							dateOfTermination,
+						);
+					});
 
 					this.$patch({
 						isLoading: false,
 						employees: employees,
 					});
 				} catch (error) {
-					console.error('Invalid JSON file:', error);
+					console.error(error);
+					alert(error);
 					this.$patch({ isLoading: false });
 				}
 			};

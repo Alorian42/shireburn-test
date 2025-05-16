@@ -45,7 +45,7 @@ import { useFileDialog } from '@vueuse/core';
 const employeeStore = useEmployeeStore();
 const { isLoading, employeeRows } = storeToRefs(employeeStore);
 
-const { open, onChange } = useFileDialog({
+const { open, onChange, reset } = useFileDialog({
 	accept: 'application/json',
 	multiple: false,
 });
@@ -87,6 +87,8 @@ onChange((files) => {
 	if (files && files.length > 0) {
 		employeeStore.importEmployees(files[0]);
 	}
+
+	reset();
 });
 </script>
 
