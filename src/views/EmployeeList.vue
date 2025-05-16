@@ -55,7 +55,7 @@ const { open, onChange, reset } = useFileDialog({
 const router = useRouter();
 
 const headers: Header[] = [
-	{ text: 'Name', value: 'fullName', sortable: true, width: 100 },
+	{ text: 'Employee Full Name', value: 'fullName', sortable: true, width: 100 },
 	{ text: 'Occupation', value: 'occupation', sortable: true, width: 100 },
 	{ text: 'Department', value: 'department', sortable: true, width: 100 },
 	{
