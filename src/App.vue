@@ -40,15 +40,10 @@ button {
 	cursor: pointer;
 	font-size: 0.8rem;
 	font-weight: 600;
-	transition:
-		background 0.2s,
-		box-shadow 0.2s;
-	box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08);
 }
 
 button:hover {
 	background: linear-gradient(90deg, #6366f1 0%, #7c3aed 100%);
-	box-shadow: 0 4px 16px rgba(124, 58, 237, 0.16);
 }
 
 .vue3-easy-data-table,
